@@ -3,6 +3,9 @@ import HomeTemplate from "../_page/HomeTeplate";
 import AdminTemplate from "../_page/AdminTeplate";
 import AboutPage from "../_page/HomeTeplate/aboutPage";
 import DashBoard from "../_page/AdminTeplate/dashboard";
+import MovieManagementPage from "../_page/AdminTeplate/MovieManagementPage";
+import AuthPage from "../_page/AdminTeplate/_auth";
+import Addnew from "../_page/AdminTeplate/Addnew";
 
 const routes = [
   {
@@ -23,7 +26,19 @@ const routes = [
         path: "dashboard",
         element: DashBoard,
       },
+      {
+        path: "films",
+        element: MovieManagementPage,
+      },
+      {
+        path: "films/addnew",
+        element: Addnew,
+      },
     ],
+  },
+  {
+    path: "auth",
+    element: AuthPage,
   },
 ];
 
