@@ -12,7 +12,7 @@ export const fetchListMovie = createAsyncThunk(
         } catch (error) {
             return error;
         } finally {
-            
+
         }
     }
 );
@@ -28,18 +28,18 @@ const listMovieReducer = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder
-            .addCase(fetchListMovie.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(fetchListMovie.fulfilled, (state, action) => {
-                state.loading = false;
-                state.data = action.payload;
-            })
-            .addCase(fetchListMovie.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
+        builder.addCase(fetchListMovie.pending, (state) => {
+            state.loading = true;
+
+        });
+        builder.addCase(fetchListMovie.fulfilled, (state, action) => {
+            state.loading = false;
+            state.data = action.payload;
+        });
+        builder.addCase(fetchListMovie.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
     },
 });
 

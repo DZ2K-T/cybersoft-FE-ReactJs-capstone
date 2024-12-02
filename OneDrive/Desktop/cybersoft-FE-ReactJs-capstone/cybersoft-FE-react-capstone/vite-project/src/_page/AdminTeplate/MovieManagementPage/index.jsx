@@ -11,7 +11,6 @@ import { fetchListMovie } from "./duck/reducer";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function MovieManagementPage() {
- 
   const dispatch = useDispatch();
   const props = useSelector((state) => state.listMovieReducer);
   useEffect(() => {
@@ -100,7 +99,7 @@ export default function MovieManagementPage() {
                     <span className="sr-only">Open user menu</span>
                     <img
                       className="w-8 h-8 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                      src="https://scontent.fsgn8-3.fna.fbcdn.net/v/t39.30808-6/217547034_541490913872359_6533652150174378304_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=o1APX21PGdwQ7kNvgE_9R8O&_nc_zt=23&_nc_ht=scontent.fsgn8-3.fna&_nc_gid=ABSfFzwXiL1dOFIt3ouNH-E&oh=00_AYCv0l8gMFoHHyVEpYcsbMieF_hn2XFqwXLcTE8Lo7TTEA&oe=67532FCF"
                       alt="user photo"
                     />
                   </button>
