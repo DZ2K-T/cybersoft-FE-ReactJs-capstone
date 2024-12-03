@@ -19,11 +19,11 @@ export default function MovieManagementPage() {
 
   // if (props.loading)
   //   return (
-  //     <div class="text-center">
+  //     <div className="text-center">
   //       <div role="status">
   //         <svg
   //           aria-hidden="true"
-  //           class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+  //           className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
   //           viewBox="0 0 100 101"
   //           fill="none"
   //           xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +37,7 @@ export default function MovieManagementPage() {
   //             fill="currentFill"
   //           />
   //         </svg>
-  //         <span class="sr-only">Loading...</span>
+  //         <span className="sr-only">Loading...</span>
   //       </div>
   //     </div>
   //   );
@@ -260,11 +260,13 @@ export default function MovieManagementPage() {
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
           <div className="sm:rounded-lg pl-2 mb-3 ">
             <h1 className="font-bold mb-3">QUẢN LÝ PHIM</h1>
-            <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-xs font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
-              <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                Thêm phim
-              </span>
-            </button>
+            <Link to={"/admin/films/addnew"}>
+              <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-xs font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                  Thêm phim
+                </span>
+              </button>
+            </Link>
           </div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             {/* Form input search */}
@@ -335,15 +337,15 @@ export default function MovieManagementPage() {
           </div>
         </div>
         <nav aria-label="Page navigation example">
-          <ul class="flex items-center -space-x-px h-10 text-base justify-end">
+          <ul className="flex items-center -space-x-px h-10 text-base justify-end">
             <li>
               <a
                 href="#"
-                class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
-                <span class="sr-only">Previous</span>
+                <span className="sr-only">Previous</span>
                 <svg
-                  class="w-3 h-3 rtl:rotate-180"
+                  className="w-3 h-3 rtl:rotate-180"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -351,9 +353,9 @@ export default function MovieManagementPage() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M5 1 1 5l4 4"
                   />
                 </svg>
@@ -362,7 +364,7 @@ export default function MovieManagementPage() {
             <li>
               <a
                 href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 1
               </a>
@@ -370,7 +372,7 @@ export default function MovieManagementPage() {
             <li>
               <a
                 href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 2
               </a>
@@ -379,7 +381,7 @@ export default function MovieManagementPage() {
               <a
                 href="#"
                 aria-current="page"
-                class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                className="z-10 flex items-center justify-center px-4 h-10 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
               >
                 3
               </a>
@@ -387,7 +389,7 @@ export default function MovieManagementPage() {
             <li>
               <a
                 href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 4
               </a>
@@ -395,7 +397,7 @@ export default function MovieManagementPage() {
             <li>
               <a
                 href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 5
               </a>
@@ -403,11 +405,11 @@ export default function MovieManagementPage() {
             <li>
               <a
                 href="#"
-                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
-                <span class="sr-only">Next</span>
+                <span className="sr-only">Next</span>
                 <svg
-                  class="w-3 h-3 rtl:rotate-180"
+                  className="w-3 h-3 rtl:rotate-180"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -415,9 +417,9 @@ export default function MovieManagementPage() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
