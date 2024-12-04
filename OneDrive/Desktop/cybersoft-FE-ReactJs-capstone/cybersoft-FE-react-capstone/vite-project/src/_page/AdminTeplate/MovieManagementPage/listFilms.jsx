@@ -31,10 +31,12 @@ export default function ListFilms(props) {
           <Link to={`/admin/films/edit/${data.maPhim}`}>
             <button className="mr-3">
               <FontAwesomeIcon icon={faPenToSquare} />
+              {/* button edit */}
             </button>
           </Link>
           <button>
             <FontAwesomeIcon icon={faTrash} />
+            {/* button delete */}
           </button>
         </td>
       </tr>

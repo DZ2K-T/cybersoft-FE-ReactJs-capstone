@@ -6,7 +6,8 @@ import DashBoard from "../_page/AdminTeplate/dashboard";
 import MovieManagementPage from "../_page/AdminTeplate/MovieManagementPage";
 import AuthPage from "../_page/AdminTeplate/_auth";
 import Addnew from "../_page/AdminTeplate/Addnew";
-import Editfims from "../_page/AdminTeplate/editFilms";
+import formEdit from "../_page/AdminTeplate/UpdateFilm";
+// import Editfims from "../_page/AdminTeplate/editFilms";
 
 const routes = [
   {
@@ -35,9 +36,13 @@ const routes = [
         path: "films/addnew",
         element: Addnew,
       },
+      // {
+      //   path: "films/edit/:id",
+      //   element: Editfims,
+      // },
       {
-        path: "films/edit/:id",
-        element: Editfims,
+        path: "films/edit/:idFilm",
+        element: formEdit,
       },
     ],
   },

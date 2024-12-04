@@ -11,9 +11,7 @@ export const fetchListMovie = createAsyncThunk(
 
         } catch (error) {
             return error;
-        } finally {
-
-        }
+        } 
     }
 );
 
