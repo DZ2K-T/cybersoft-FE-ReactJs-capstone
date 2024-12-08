@@ -1,15 +1,16 @@
-import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../../services/apiService";
+
 
 
 export const deleteFilm = createAsyncThunk(
     "listmovie/deletefilm",
-    async (id_film, { isRejectedWithValue }) => {
+    async (id_film, { rejectWithValue }) => {
         try {
-            const result = await api.delete(`QuanLyPhim/XoaPhim?MaPhim=${id_film}`)
-            return result.data.content;
+            await api.delete(`QuanLyPhim/XoaPhim?MaPhim=${id_film}`)
+            return id_film;
         } catch (error) {
-            return isRejectedWithValue(error);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 
@@ -18,7 +19,7 @@ export const deleteFilm = createAsyncThunk(
 
 const initialState = {
     loading: false,
-    data: null,
+    data: [],
     error: null,
 };
 

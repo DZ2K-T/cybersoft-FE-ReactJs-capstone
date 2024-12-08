@@ -1,6 +1,6 @@
 import { faFile } from "@fortawesome/free-regular-svg-icons"; // Regular icon
 import { faTv } from "@fortawesome/free-solid-svg-icons";
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,15 +8,12 @@ import { useParams } from "react-router-dom";
 import { fecthInforFilm } from "../inforFilms/duck/reducer";
 import { formEdit } from "../UpdateFilm/duck/reducer";
 
-
 export default function UpdateFilm() {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dispatch = useDispatch();
   const props = useSelector((state) => state.inforFilmReducer);
   const { idFilm } = useParams();
   console.log(idFilm);
-
-  
 
   useEffect(() => {
     if (idFilm) {
@@ -83,7 +80,6 @@ export default function UpdateFilm() {
     return `${day}/${month}/${year}`;
   };
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -104,7 +100,6 @@ export default function UpdateFilm() {
     });
     dispatch(formEdit(formData));
     // Gửi dữ liệu qua dispatch
-  
   };
 
   const handleFileChange = (e) => {
@@ -372,7 +367,7 @@ export default function UpdateFilm() {
 
             <div className="relative z-0 w-full mb-5 group">
               <input
-                defaultValue={props.moTa || ""}
+                defaultValue={update.moTa}
                 onChange={handleInputChange}
                 type="text"
                 name="moTa"

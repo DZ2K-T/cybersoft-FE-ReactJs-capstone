@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fomrAddnew } from "./duck/reducer";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import React from "react";
 export default function Addnew() {
@@ -30,7 +32,7 @@ export default function Addnew() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+
     setAddnew((prevState) => ({
       ...prevState,
       [name]:
@@ -73,7 +75,7 @@ export default function Addnew() {
       alert("Vui lòng chọn hình ảnh!");
       return;
     }
-
+    toast.success("Thêm phim thành công!");
     // // Tạo FormData
     const formData = new FormData();
     Object.keys(addnew).forEach((key) => {
@@ -94,6 +96,7 @@ export default function Addnew() {
 
   return (
     <div>
+      <ToastContainer />
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
@@ -237,7 +240,7 @@ export default function Addnew() {
             <li>
               <button
                 type="button"
-                // onClick={toggleDropdown} 
+                // onClick={toggleDropdown}
                 className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 aria-controls="dropdown-example"
                 data-collapse-toggle="dropdown-example"

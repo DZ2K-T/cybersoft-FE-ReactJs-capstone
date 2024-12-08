@@ -19,7 +19,7 @@ export const formEdit = createAsyncThunk(
 
 const initialState = {
     loading: false,
-    data: null,
+    data: [],
     error: null,
 
 };

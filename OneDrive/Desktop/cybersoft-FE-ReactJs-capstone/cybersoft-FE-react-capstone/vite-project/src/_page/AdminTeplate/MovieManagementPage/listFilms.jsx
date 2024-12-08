@@ -5,10 +5,12 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import DeleteFilm from "../DeleteFilm";
 
 
 export default function ListFilms(props) {
   const { data } = props;
+
   return (
     <tbody>
       <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -34,10 +36,8 @@ export default function ListFilms(props) {
               {/* button edit */}
             </button>
           </Link>
-          <button>
-            <FontAwesomeIcon icon={faTrash} />
-            {/* button delete */}
-          </button>
+
+          <DeleteFilm filmId={data.maPhim} />
         </td>
       </tr>
     </tbody>
