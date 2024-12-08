@@ -2,22 +2,50 @@ import { faFile } from "@fortawesome/free-regular-svg-icons"; // Regular icon
 import { faTv } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fomrAddnew } from "./duck/reducer";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useParams } from "react-router-dom";
+import { fecthInforFilm } from "../inforFilms/duck/reducer";
+import { formEdit } from "../UpdateFilm/duck/reducer";
 
-import React from "react";
-export default function Addnew() {
+export default function UpdateFilm() {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // const toggleDropdown = () => {
-  //   setIsDropdownOpen(!isDropdownOpen);
-  // };
-  // dd/MM/yyyy!
   const dispatch = useDispatch();
-  const [addnew, setAddnew] = useState({
+  const props = useSelector((state) => state.inforFilmReducer);
+  const { idFilm } = useParams();
+  console.log(idFilm);
+
+  useEffect(() => {
+    if (idFilm) {
+      dispatch(fecthInforFilm(idFilm));
+    }
+  }, [idFilm, dispatch]);
+
+  //   if (props.loading) {
+  //     return <div>Loading...</div>;
+  //   }
+  useEffect(() => {
+    if (props.data) {
+      setUpdate({
+        maPhim: props.data.maPhim || "",
+        tenPhim: props.data.tenPhim || "",
+        trailer: props.data.trailer || "",
+        moTa: props.data.moTa || "",
+        rating: props.data.rating || "",
+        ngayKhoiChieu: props.data.ngayKhoiChieu
+          ? formatDate(props.data.ngayKhoiChieu)
+          : "",
+        sapChieu: props.data.sapChieu ?? true,
+        dangChieu: props.data.dangChieu ?? true,
+        hot: props.data.hot ?? true,
+        danhGia: props.data.danhGia || 10,
+        hinhAnh: props.data.hinhAnh || undefined,
+      });
+    }
+  }, [props.data]);
+
+  const [update, setUpdate] = useState({
+    maPhim: "",
     tenPhim: "",
     trailer: "",
     moTa: "",
@@ -33,7 +61,7 @@ export default function Addnew() {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    setAddnew((prevState) => ({
+    setUpdate((prevState) => ({
       ...prevState,
       [name]:
         type === "checkbox"
@@ -52,51 +80,40 @@ export default function Addnew() {
     return `${day}/${month}/${year}`;
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (!addnew.tenPhim || !addnew.trailer || !addnew.moTa) {
-  //     alert("Vui lòng điền đầy đủ thông tin!");
-  //     return;
-  //   }
-
-  //   console.log(addnew);
-  //   dispatch(fomrAddnew(addnew));
-  // };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Kiểm tra dữ liệu trước khi tạo FormData
-    if (!addnew.tenPhim || !addnew.trailer || !addnew.moTa) {
+    if (!update.tenPhim || !update.trailer || !update.moTa) {
       alert("Vui lòng điền đầy đủ thông tin!");
       return;
     }
-    if (!addnew.hinhAnh) {
+    if (!update.hinhAnh) {
       alert("Vui lòng chọn hình ảnh!");
       return;
     }
-    toast.success("Thêm phim thành công!");
+
     // // Tạo FormData
     const formData = new FormData();
-    Object.keys(addnew).forEach((key) => {
-      formData.append(key, addnew[key]);
+    Object.keys(update).forEach((key) => {
+      formData.append(key, update[key]);
     });
-
+    dispatch(formEdit(formData));
     // Gửi dữ liệu qua dispatch
-    dispatch(fomrAddnew(formData));
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setAddnew((prevState) => ({
+    setUpdate((prevState) => ({
       ...prevState,
       hinhAnh: file,
     }));
   };
+  const { data } = props;
+  console.log(data);
 
   return (
     <div>
-      <ToastContainer />
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
@@ -280,7 +297,7 @@ export default function Addnew() {
                 </li>
                 <li>
                   <Link
-                    to={"/admin/films/addnew"}
+                    to={"/admin/films/update"}
                     className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     <span className="">
@@ -313,7 +330,7 @@ export default function Addnew() {
             <div className="relative z-0 w-full mb-5 group">
               <input
                 type="text"
-                value={addnew.tenPhim}
+                value={update.tenPhim}
                 onChange={handleInputChange}
                 name="tenPhim"
                 id="tenPhim"
@@ -331,7 +348,7 @@ export default function Addnew() {
 
             <div className="relative z-0 w-full mb-5 group">
               <input
-                value={addnew.trailer}
+                value={update.trailer}
                 onChange={handleInputChange}
                 type="url"
                 name="trailer"
@@ -350,7 +367,7 @@ export default function Addnew() {
 
             <div className="relative z-0 w-full mb-5 group">
               <input
-                value={addnew.moTa}
+                defaultValue={update.moTa}
                 onChange={handleInputChange}
                 type="text"
                 name="moTa"
@@ -369,7 +386,7 @@ export default function Addnew() {
 
             <div className="relative z-0 w-full mb-5 group">
               <input
-                // value={addnew.ngayKhoiChieu}
+                // value={update.ngayKhoiChieu}
                 onChange={handleInputChange}
                 type="date"
                 name="ngayKhoiChieu"
@@ -389,7 +406,7 @@ export default function Addnew() {
             <div className="relative z-0 w-full mb-5 group">
               <label className="inline-flex items-center cursor-pointer">
                 <input
-                  checked={addnew.dangChieu}
+                  checked={update.dangChieu}
                   onChange={handleInputChange}
                   type="checkbox"
                   defaultValue
@@ -405,7 +422,7 @@ export default function Addnew() {
             <div className="relative z-0 w-full mb-5 group">
               <label className="inline-flex items-center cursor-pointer">
                 <input
-                  checked={addnew.sapChieu}
+                  checked={update.sapChieu}
                   onChange={handleInputChange}
                   type="checkbox"
                   defaultValue
@@ -421,7 +438,7 @@ export default function Addnew() {
             <div className="relative z-0 w-full mb-5 group">
               <label className="inline-flex items-center cursor-pointer">
                 <input
-                  checked={addnew.hot}
+                  checked={update.hot}
                   onChange={handleInputChange}
                   type="checkbox"
                   defaultValue
@@ -434,7 +451,7 @@ export default function Addnew() {
               </label>
               <div className="relative z-0 w-full mb-5 group">
                 <input
-                  value={addnew.rating}
+                  value={update.rating}
                   onChange={handleInputChange}
                   type="number"
                   name="rating"
@@ -472,7 +489,7 @@ export default function Addnew() {
                 type="submit  "
                 className="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
               >
-                Thêm phim
+                Cập nhật
               </button>
             </div>
           </form>

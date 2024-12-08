@@ -4,9 +4,13 @@ import { faTv } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import DeleteFilm from "../DeleteFilm";
+
 
 export default function ListFilms(props) {
   const { data } = props;
+
   return (
     <tbody>
       <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
@@ -26,12 +30,14 @@ export default function ListFilms(props) {
         <td className="px-6 py-4">{data.tenPhim}</td>
         <td className="px-6 py-4">{data.moTa}</td>
         <td className="px-6 py-4 ">
-          <button className="mr-3">
-            <FontAwesomeIcon icon={faPenToSquare} />
-          </button>
-          <button>
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
+          <Link to={`/admin/films/edit/${data.maPhim}`}>
+            <button className="mr-3">
+              <FontAwesomeIcon icon={faPenToSquare} />
+              {/* button edit */}
+            </button>
+          </Link>
+
+          <DeleteFilm filmId={data.maPhim} />
         </td>
       </tr>
     </tbody>
