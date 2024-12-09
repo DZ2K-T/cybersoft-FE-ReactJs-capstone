@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import TestImage from "./test";
 import ListMovie from "./listMovie";
 import Blog from "./Blog"
+import Contact from "./contact"
 export default function HomeTemplate() {
   return (
     <div>
@@ -12,6 +13,7 @@ export default function HomeTemplate() {
       <Carousel />
       <ListMovie />
       <Blog />
+      <Contact />
       <Outlet />
       <Footer />
       
