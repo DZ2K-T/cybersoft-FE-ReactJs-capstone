@@ -26,7 +26,7 @@ const Carousel = () => {
           >
             <img
               src={src}
-              className="absolute block w-full h-full object-cover"
+              className="absolute block w-full h-full"
               alt={`Banner ${index + 1}`}
             />
           </div>

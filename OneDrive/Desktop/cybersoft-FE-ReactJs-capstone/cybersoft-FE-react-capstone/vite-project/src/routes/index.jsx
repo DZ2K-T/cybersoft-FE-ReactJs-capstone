@@ -10,7 +10,7 @@ import formEdit from "../_page/AdminTeplate/UpdateFilm";
 import ListMovie from "../_page/HomeTeplate/listMovie";
 import Carousel from "../_page/HomeTeplate/Carousel";
 // import Editfims from "../_page/AdminTeplate/editFilms";
-
+import dangKy from "../_page/HomeTeplate/dangKi"
 const routes = [
   {
     path: "home",
@@ -27,7 +27,11 @@ const routes = [
       {
         path: "me",
         element: Carousel,
-      }
+      },
+      {
+        path: "dangky",
+        element: dangKy,
+      },
     ],
   },
   {
