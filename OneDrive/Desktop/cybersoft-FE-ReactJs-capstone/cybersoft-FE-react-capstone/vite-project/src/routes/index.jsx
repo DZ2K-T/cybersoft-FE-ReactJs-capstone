@@ -11,6 +11,7 @@ import ListMovie from "../_page/HomeTeplate/listMovie";
 import Carousel from "../_page/HomeTeplate/Carousel";
 // import Editfims from "../_page/AdminTeplate/editFilms";
 import dangKy from "../_page/HomeTeplate/dangKi"
+import dangNhap from "../_page/HomeTeplate/dangNhap"
 const routes = [
   {
     path: "home",
@@ -28,11 +29,16 @@ const routes = [
         path: "me",
         element: Carousel,
       },
-      {
-        path: "dangky",
-        element: dangKy,
-      },
+      
     ],
+  },
+  {
+    path: "dangky",
+    element: dangKy,
+  },
+  {
+    path: "dangnhap",
+    element: dangNhap,
   },
   {
     path: "admin",
