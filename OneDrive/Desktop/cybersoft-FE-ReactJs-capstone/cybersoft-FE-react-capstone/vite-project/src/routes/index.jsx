@@ -7,17 +7,27 @@ import MovieManagementPage from "../_page/AdminTeplate/MovieManagementPage";
 import AuthPage from "../_page/AdminTeplate/_auth";
 import Addnew from "../_page/AdminTeplate/Addnew";
 import formEdit from "../_page/AdminTeplate/UpdateFilm";
+import ListMovie from "../_page/HomeTeplate/listMovie";
+import Carousel from "../_page/HomeTeplate/Carousel";
 // import Editfims from "../_page/AdminTeplate/editFilms";
 
 const routes = [
   {
-    path: "",
+    path: "home",
     element: HomeTemplate,
     children: [
       {
         path: "about",
         element: AboutPage,
       },
+      {
+        path: "list-movie",
+        element: ListMovie,
+      },
+      {
+        path: "me",
+        element: Carousel,
+      }
     ],
   },
   {
