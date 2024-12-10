@@ -7,6 +7,7 @@ import MovieManagementPage from "../_page/AdminTeplate/MovieManagementPage";
 import AuthPage from "../_page/AdminTeplate/_auth";
 import Addnew from "../_page/AdminTeplate/Addnew";
 import formEdit from "../_page/AdminTeplate/UpdateFilm";
+import Khachhang from "../_page/HomeTeplate/test/khachhang";
 // import Editfims from "../_page/AdminTeplate/editFilms";
 
 const routes = [
@@ -17,6 +18,10 @@ const routes = [
       {
         path: "about",
         element: AboutPage,
+      },
+      {
+        path: "test",
+        element: Khachhang,
       },
     ],
   },
