@@ -8,6 +8,8 @@ import inforFilmReducer from "./../_page/AdminTeplate/inforFilms/duck/reducer"
 import updateFilmReducer from "./../_page/AdminTeplate/UpdateFilm/duck/reducer"
 import deleteFilmReducer from "./../_page/AdminTeplate/DeleteFilm/duck/reducer"
 import listMovieReducerMovie from "./../_page/HomeTeplate/listMovie/duck/reducer"
+import listMovies from "./../_page/HomeTeplate/listMovies/duck/reducer"
+import dangNhap from "./../_page/HomeTeplate/dangNhap/duck/reducer"
 const store = configureStore({
     reducer: {
         listMovieReducer,
@@ -19,6 +21,8 @@ const store = configureStore({
         updateFilmReducer,
         deleteFilmReducer,
         listMovieReducerMovie,
+        listMovies,
+        dangNhap,
 
 
     },
