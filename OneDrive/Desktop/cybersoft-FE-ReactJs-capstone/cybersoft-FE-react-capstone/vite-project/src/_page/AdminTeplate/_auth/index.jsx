@@ -11,7 +11,7 @@ export default function AuthPage() {
     if (props.data?.maLoaiNguoiDung === "QuanTri") {
       navigate("/admin/films");
     } else if (props.data?.maLoaiNguoiDung === "KhachHang") {
-      navigate("/test");
+      navigate("/me");
     }
   }, [props.data]);
 
