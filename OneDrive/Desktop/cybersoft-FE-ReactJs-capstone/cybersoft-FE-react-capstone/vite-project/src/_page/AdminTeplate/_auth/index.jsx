@@ -8,8 +8,10 @@ export default function AuthPage() {
   const props = useSelector((state) => state.authReducer);
   const navigate = useNavigate();
   useEffect(() => {
-    if (props.data) {
+    if (props.data?.maLoaiNguoiDung === "QuanTri") {
       navigate("/admin/films");
+    } else if (props.data?.maLoaiNguoiDung === "KhachHang") {
+      navigate("/me");
     }
   }, [props.data]);
 
@@ -25,12 +27,12 @@ export default function AuthPage() {
     });
   };
 
-  const handleLogin = (e) => {
+  const handleOnChange = (e) => {
     // ngăn load trang
     e.preventDefault();
     dispath(authLogin(user));
   };
-  if (props.loading) return <p>Loading...</p>;
+  if (props.error?.data?.content) return <p>Loading...</p>;
 
   const renderError = () => {
     const { error } = props;
@@ -40,14 +42,14 @@ export default function AuthPage() {
           className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
           role="alert"
         >
-          <span className="font-medium">{error.data.content}</span>
+          <span className="font-medium">{props.error.data.content}</span>
         </div>
       );
     }
   };
 
   return (
-    <form onSubmit={handleLogin} className="max-w-sm mx-auto">
+    <form onSubmit={handleOnChange} className="max-w-sm mx-auto">
       {renderError()}
       <div className="mb-5">
         <label

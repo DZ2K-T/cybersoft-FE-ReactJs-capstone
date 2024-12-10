@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { deleteFilm } from "../DeleteFilm/duck/reducer";
+import { useState } from "react";
+
 
 const DeleteFilm = ({ filmId }) => {
   const dispatch = useDispatch();

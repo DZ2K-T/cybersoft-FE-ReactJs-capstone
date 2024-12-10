@@ -1,84 +1,72 @@
-import React from 'react';
-import Footer from '../components/Footer';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./duck/reducer";
+import { useNavigate } from "react-router-dom";
 
-const Index = () => {
+const LoginPage = () => {
+  const [taiKhoan, setTaiKhoan] = useState("");
+  const [matKhau, setMatKhau] = useState("");
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((state) => state.authReducer);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(login({ taiKhoan, matKhau }));
+  };
+
+  // Điều hướng nếu đăng nhập thành công
+  if (user) {
+    navigate("/home"); // Thay `/dashboard` bằng trang bạn muốn
+  }
+
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-        <div className="bg-white shadow-md dark:bg-gray-900 rounded-lg w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2">
-          {/* Left Section: Title and Description */}
-          <div className="flex flex-col justify-center items-center p-8 bg-blue-700 text-white rounded-t-lg lg:rounded-tr-none lg:rounded-l-lg">
-            <h1 className="text-3xl font-bold mb-4">Đăng nhập</h1>
-            <p className="text-sm leading-relaxed">
-              Chào mừng bạn trở lại! Hãy đăng nhập để truy cập vào tài khoản của bạn và tận hưởng những trải nghiệm tuyệt vời.
-            </p>
-            <p className="mt-4 text-sm">
-              Nếu bạn chưa có tài khoản, hãy <a href="/dangky" className="underline font-semibold">đăng ký ngay!</a>
-            </p>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded shadow-md w-96">
+        <h2 className="text-2xl font-bold mb-4">Đăng nhập</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block mb-1">Tài khoản</label>
+            <input
+              type="text"
+              value={taiKhoan}
+              onChange={(e) => setTaiKhoan(e.target.value)}
+              className="w-full px-3 py-2 border rounded"
+              placeholder="Nhập tài khoản"
+              required
+            />
           </div>
-
-          {/* Right Section: Login Form */}
-          <div className="p-8">
-            <form className="max-w-sm mx-auto">
-              <div className="mb-5">
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Email của bạn
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="name@flowbite.com"
-                  required
-                />
-              </div>
-              <div className="mb-5">
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Mật khẩu của bạn
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div className="flex items-start mb-5">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    type="checkbox"
-                    defaultValue
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                  />
-                </div>
-                <label
-                  htmlFor="remember"
-                  className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
-                  Ghi nhớ tôi
-                </label>
-              </div>
-              <button
-                type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Đăng nhập
-              </button>
-            </form>
+          <div className="mb-4">
+            <label className="block mb-1">Mật khẩu</label>
+            <input
+              type="password"
+              value={matKhau}
+              onChange={(e) => setMatKhau(e.target.value)}
+              className="w-full px-3 py-2 border rounded"
+              placeholder="Nhập mật khẩu"
+              required
+            />
           </div>
-        </div>
+          <button
+            type="submit"
+            className={`w-full py-2 text-white bg-blue-500 rounded ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={loading}
+          >
+            {loading ? "Đang xử lý..." : "Đăng nhập"}
+          </button>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+        </form>
+        <p className="mt-4 text-center">
+          Chưa có tài khoản?{" "}
+          <a href="/register" className="text-blue-500">
+            Đăng ký
+          </a>
+        </p>
       </div>
-
-      <Footer />
-    </>
+    </div>
   );
 };
 
-export default Index;
+export default LoginPage;
