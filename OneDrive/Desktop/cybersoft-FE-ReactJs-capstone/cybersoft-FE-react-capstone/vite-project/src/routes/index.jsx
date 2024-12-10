@@ -10,25 +10,24 @@ import formEdit from "../_page/AdminTeplate/UpdateFilm";
 import ListMovie from "../_page/HomeTeplate/listMovie";
 import Carousel from "../_page/HomeTeplate/Carousel";
 // import Editfims from "../_page/AdminTeplate/editFilms";
-import dangKy from "../_page/HomeTeplate/dangKi"
-import dangNhap from "../_page/HomeTeplate/dangNhap"
+import dangKy from "../_page/HomeTeplate/dangKi";
+import dangNhap from "../_page/HomeTeplate/dangNhap";
 import ListMovies from "../_page/HomeTeplate/listMovies";
 
 const routes = [
   {
-    path: "home",
+    path: "",
     element: HomeTemplate,
     children: [
       {
         path: "about",
         element: AboutPage,
       },
-     
+
       {
         path: "me",
         element: Carousel,
       },
-      
     ],
   },
   {
