@@ -13,6 +13,7 @@ import Carousel from "../_page/HomeTeplate/Carousel";
 import dangKy from "../_page/HomeTeplate/dangKi";
 import dangNhap from "../_page/HomeTeplate/dangNhap";
 import ListMovies from "../_page/HomeTeplate/listMovies";
+import Showtime from "../_page/AdminTeplate/Showtime";
 
 const routes = [
   {
@@ -65,6 +66,10 @@ const routes = [
       {
         path: "films/edit/:idFilm",
         element: formEdit,
+      },
+      {
+        path: "films/showtime/:idFilm",
+        element: Showtime,
       },
     ],
   },

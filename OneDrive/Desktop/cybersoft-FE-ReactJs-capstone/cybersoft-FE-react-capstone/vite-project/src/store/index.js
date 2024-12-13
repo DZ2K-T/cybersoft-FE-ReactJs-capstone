@@ -3,6 +3,7 @@ import listMovieReducer from "./../_page/AdminTeplate/MovieManagementPage/duck/r
 import fomrAddnewReducer from "./../_page/AdminTeplate/Addnew/duck/reducer"
 // import formEditFilmReducer from "./../_page/AdminTeplate/editFilms/duck/reducer";
 // import getFilmReducer from "./../_page/AdminTeplate/editFilms/duck/inforFilm"
+import creatShowTimeReducer from "./../_page/AdminTeplate/Showtime/duck/reducer"
 import authReducer from "./../_page/AdminTeplate/_auth/duck/reducer"
 import inforFilmReducer from "./../_page/AdminTeplate/inforFilms/duck/reducer"
 import updateFilmReducer from "./../_page/AdminTeplate/UpdateFilm/duck/reducer"
@@ -14,6 +15,7 @@ const store = configureStore({
     reducer: {
         listMovieReducer,
         fomrAddnewReducer,
+        creatShowTimeReducer,
         // formEditFilmReducer,
         // getFilmReducer,
         authReducer,
@@ -23,6 +25,7 @@ const store = configureStore({
         listMovieReducerMovie,
         listMovies,
         dangNhap,
+
 
 
     },

@@ -5,12 +5,12 @@ import api from "../../../../services/apiService";
 
 export const formEdit = createAsyncThunk(
     "listMovie/editMovie",
-    async (edit, { RejectedWithValue }) => {
+    async (edit, { rejectWithValue }) => {
         try {
             const result = await api.post(`QuanLyPhim/CapNhatPhimUpload`, edit);
             return result.data.content;
         } catch (error) {
-            return RejectedWithValue(error);
+            return rejectWithValue(error);
         }
     }
 );
