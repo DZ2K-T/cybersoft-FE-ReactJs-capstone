@@ -1,122 +1,141 @@
-import React from 'react';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { register } from "./duck/reducer"; 
+import { useNavigate } from "react-router-dom";
+
 export default function Register() {
+  const [taiKhoan, setTaiKhoan] = useState("");
+  const [matKhau, setMatKhau] = useState("");
+  const [matKhauConfirm, setMatKhauConfirm] = useState("");
+  const [email, setEmail] = useState("");
+  const [soDt, setSoDt] = useState("");
+  const [hoTen, setHoTen] = useState("");
+  const [validationError, setValidationError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // New state for success message
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const validateForm = () => {
+    if (!taiKhoan.trim()) return "Tài khoản không được để trống!";
+    if (!matKhau.trim()) return "Mật khẩu không được để trống!";
+    if (matKhau !== matKhauConfirm) return "Mật khẩu xác nhận không trùng khớp!";
+    if (!email.trim()) return "Email không được để trống!";
+    if (!soDt.trim()) return "Số điện thoại không được để trống!";
+    if (!hoTen.trim()) return "Họ tên không được để trống!";
+    return "";
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const error = validateForm();
+    if (error) {
+      setValidationError(error);
+      return;
+    }
+    const newUser = {
+      taiKhoan,
+      matKhau,
+      email,
+      soDt,
+      hoTen,
+      maNhom: "GP01",  // Fixed maNhom
+      maLoaiNguoiDung: "KhachHang"  // Fixed maLoaiNguoiDung
+    };
+    dispatch(register(newUser)); // Dispatching the register action
+    setSuccessMessage("Đăng ký thành công!"); // Set the success message
+    setTimeout(() => {
+      navigate("/dangnhap"); // Redirect to the login page after a delay
+    }, 2000); // Delay the navigation to allow the user to see the success message
+  };
+
+  const handleInputChange = (e, setter) => {
+    setter(e.target.value);
+    // Reset validation error when user starts typing
+    if (validationError) setValidationError("");
+  };
+
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-        <div className="bg-white shadow-md dark:bg-gray-900 rounded-lg w-full max-w-md p-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-            Đăng Ký
-          </h1>
-          <form className="space-y-5">
-            {/* Tài khoản */}
-            <div>
-              <label
-                htmlFor="taiKhoan"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Tài khoản
-              </label>
-              <input
-                type="text"
-                id="taiKhoan"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Tên tài khoản"
-                required
-              />
-            </div>
-            {/* Mật khẩu */}
-            <div>
-              <label
-                htmlFor="matKhau"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Mật khẩu
-              </label>
-              <input
-                type="password"
-                id="matKhau"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Mật khẩu"
-                required
-              />
-            </div>
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="name@flowbite.com"
-                required
-              />
-            </div>
-            {/* Số điện thoại */}
-            <div>
-              <label
-                htmlFor="soDt"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Số điện thoại
-              </label>
-              <input
-                type="tel"
-                id="soDt"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Số điện thoại"
-                required
-              />
-            </div>
-            {/* Mã nhóm */}
-            <div>
-              <label
-                htmlFor="maNhom"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Mã nhóm
-              </label>
-              <input
-                type="text"
-                id="maNhom"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Mã nhóm"
-                required
-              />
-            </div>
-            {/* Họ tên */}
-            <div>
-              <label
-                htmlFor="hoTen"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Họ và tên
-              </label>
-              <input
-                type="text"
-                id="hoTen"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Họ và tên đầy đủ"
-                required
-              />
-            </div>
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Đăng ký
-            </button>
-          </form>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white shadow-md rounded-lg w-full max-w-md p-8">
+        <h1 className="text-2xl font-bold mb-6 text-center">Đăng Ký</h1>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="taiKhoan" className="block mb-2">Tài khoản</label>
+            <input
+              type="text"
+              id="taiKhoan"
+              value={taiKhoan}
+              onChange={(e) => handleInputChange(e, setTaiKhoan)}
+              placeholder="Tên tài khoản"
+              className="w-full p-2"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="matKhau" className="block mb-2">Mật khẩu</label>
+            <input
+              type="password"
+              id="matKhau"
+              value={matKhau}
+              onChange={(e) => handleInputChange(e, setMatKhau)}
+              placeholder="Mật khẩu"
+              className="w-full p-2"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="matKhauConfirm" className="block mb-2">Xác nhận mật khẩu</label>
+            <input
+              type="password"
+              id="matKhauConfirm"
+              value={matKhauConfirm}
+              onChange={(e) => handleInputChange(e, setMatKhauConfirm)}
+              placeholder="Xác nhận mật khẩu"
+              className="w-full p-2"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block mb-2">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => handleInputChange(e, setEmail)}
+              placeholder="name@domain.com"
+              className="w-full p-2"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="soDt" className="block mb-2">Số điện thoại</label>
+            <input
+              type="tel"
+              id="soDt"
+              value={soDt}
+              onChange={(e) => handleInputChange(e, setSoDt)}
+              placeholder="Số điện thoại"
+              className="w-full p-2"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="hoTen" className="block mb-2">Họ và tên</label>
+            <input
+              type="text"
+              id="hoTen"
+              value={hoTen}
+              onChange={(e) => handleInputChange(e, setHoTen)}
+              placeholder="Họ và tên đầy đủ"
+              className="w-full p-2"
+              required
+            />
+          </div>
+          {validationError && <p className="text-red-500 text-sm">{validationError}</p>}
+          {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
+          <button type="submit" className="w-full p-2 bg-blue-600 text-white">Đăng ký</button>
+        </form>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 }

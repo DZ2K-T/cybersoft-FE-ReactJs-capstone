@@ -6,8 +6,8 @@ const initialState = {
   error: null,
 };
 
-const authSlice = createSlice({
-  name: "auth",
+const dangNhapSlice = createSlice({
+  name: "dangNhap",
   initialState,
   reducers: {
     loginStart: (state) => {
@@ -28,9 +28,9 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout } =
+  dangNhapSlice.actions;
 
-// Async Thunk for Login
 export const login = (credentials) => async (dispatch) => {
   dispatch(loginStart());
   try {
@@ -60,4 +60,4 @@ export const login = (credentials) => async (dispatch) => {
   }
 };
 
-export default authSlice.reducer;
+export default dangNhapSlice.reducer;
