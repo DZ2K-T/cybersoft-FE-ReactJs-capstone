@@ -13,6 +13,7 @@ import Carousel from "../_page/HomeTeplate/Carousel";
 import dangKy from "../_page/HomeTeplate/dangKi";
 import dangNhap from "../_page/HomeTeplate/dangNhap";
 import ListMovies from "../_page/HomeTeplate/listMovies";
+import ListRap from "../_page/HomeTeplate/listRap"
 
 const routes = [
   {
@@ -23,12 +24,11 @@ const routes = [
         path: "about",
         element: AboutPage,
       },
-
-      {
-        path: "me",
-        element: Carousel,
-      },
     ],
+  },
+  {
+    path: "list-rap",
+    element: ListRap,
   },
   {
     path: "dangky",

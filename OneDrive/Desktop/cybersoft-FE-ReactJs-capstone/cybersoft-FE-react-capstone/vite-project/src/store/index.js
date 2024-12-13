@@ -10,6 +10,9 @@ import deleteFilmReducer from "./../_page/AdminTeplate/DeleteFilm/duck/reducer"
 import listMovieReducerMovie from "./../_page/HomeTeplate/listMovie/duck/reducer"
 import listMovies from "./../_page/HomeTeplate/listMovies/duck/reducer"
 import dangNhap from "./../_page/HomeTeplate/dangNhap/duck/reducer"
+import LogOut from "./../_page/HomeTeplate/components/Header/duck/reducer"
+import Register from "../_page/HomeTeplate/dangKi/duck/reducer"
+import ListRap from "../_page/HomeTeplate/listRap/duck/reducer"
 const store = configureStore({
     reducer: {
         listMovieReducer,
@@ -23,7 +26,9 @@ const store = configureStore({
         listMovieReducerMovie,
         listMovies,
         dangNhap,
-
+        LogOut,
+        Register,
+        ListRap,
 
     },
 });

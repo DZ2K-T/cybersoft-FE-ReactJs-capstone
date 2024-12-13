@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./duck/reducer";
 import { useNavigate } from "react-router-dom";
@@ -6,24 +6,39 @@ import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const [taiKhoan, setTaiKhoan] = useState("");
   const [matKhau, setMatKhau] = useState("");
+  const [validationErrors, setValidationErrors] = useState({});
   const dispatch = useDispatch();
-  const { loading, error, user } = useSelector((state) => state.authReducer);
+  const { loading, error, user } = useSelector((state) => state.dangNhap);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/"); // Navigate after login success
+    }
+  }, [user, navigate]);
+
+  const validateForm = () => {
+    const errors = {};
+    if (!taiKhoan.trim()) errors.taiKhoan = "Tài khoản không được để trống!";
+    if (!matKhau.trim()) errors.matKhau = "Mật khẩu không được để trống!";
+    return errors;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+    setValidationErrors({});
     dispatch(login({ taiKhoan, matKhau }));
   };
 
-  // Điều hướng nếu đăng nhập thành công
-  if (user) {
-    navigate("/home"); // Thay `/dashboard` bằng trang bạn muốn
-  }
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4">Đăng nhập</h2>
+      <div className="bg-white p-6 rounded shadow-md w-full max-w-md mx-auto">
+        <h2 className="text-2xl font-bold mb-4 text-center">Đăng nhập</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block mb-1">Tài khoản</label>
@@ -33,8 +48,10 @@ const LoginPage = () => {
               onChange={(e) => setTaiKhoan(e.target.value)}
               className="w-full px-3 py-2 border rounded"
               placeholder="Nhập tài khoản"
-              required
             />
+            {validationErrors.taiKhoan && (
+              <p className="text-red-500 mt-1">{validationErrors.taiKhoan}</p>
+            )}
           </div>
           <div className="mb-4">
             <label className="block mb-1">Mật khẩu</label>
@@ -44,8 +61,10 @@ const LoginPage = () => {
               onChange={(e) => setMatKhau(e.target.value)}
               className="w-full px-3 py-2 border rounded"
               placeholder="Nhập mật khẩu"
-              required
             />
+            {validationErrors.matKhau && (
+              <p className="text-red-500 mt-1">{validationErrors.matKhau}</p>
+            )}
           </div>
           <button
             type="submit"
@@ -60,7 +79,7 @@ const LoginPage = () => {
         </form>
         <p className="mt-4 text-center">
           Chưa có tài khoản?{" "}
-          <a href="/register" className="text-blue-500">
+          <a href="/dangki" className="text-blue-500">
             Đăng ký
           </a>
         </p>
