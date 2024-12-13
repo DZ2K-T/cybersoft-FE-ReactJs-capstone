@@ -1,0 +1,131 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCinemaSystems, fetchCinemaClusters, createShowtime, resetShowtimeSuccess } from "../reducers/cinemaReducer";
+
+export default function CinemaSelect() {
+  const dispatch = useDispatch();
+  const { cinemaSystems, cinemaClusters, loading, error, showtimeSuccess } = useSelector(
+    (state) => state.cinema
+  );
+  const [selectedSystem, setSelectedSystem] = useState("");
+  const [selectedCluster, setSelectedCluster] = useState("");
+  const [showtimeData, setShowtimeData] = useState({
+    maRap: "",
+    ngayChieuGioChieu: "",
+    giaVe: "",
+    maPhim: "",
+  });
+
+  // Load hệ thống rạp khi component mount
+  useEffect(() => {
+    dispatch(fetchCinemaSystems());
+  }, [dispatch]);
+
+  // Reset trạng thái khi tạo lịch chiếu thành công
+  useEffect(() => {
+    if (showtimeSuccess) {
+      alert("Tạo lịch chiếu thành công!");
+      dispatch(resetShowtimeSuccess());
+    }
+  }, [showtimeSuccess, dispatch]);
+
+  // Xử lý khi thay đổi hệ thống rạp
+  const handleSystemChange = (event) => {
+    const selectedMaHeThongRap = event.target.value;
+    setSelectedSystem(selectedMaHeThongRap);
+    setSelectedCluster(""); // Reset cụm rạp khi thay đổi hệ thống rạp
+    if (selectedMaHeThongRap) {
+      dispatch(fetchCinemaClusters(selectedMaHeThongRap));
+    }
+  };
+
+  // Xử lý khi thay đổi cụm rạp
+  const handleClusterChange = (event) => {
+    const selectedMaRap = event.target.value;
+    setSelectedCluster(selectedMaRap);
+    setShowtimeData({ ...showtimeData, maRap: selectedMaRap });
+  };
+
+  // Xử lý thay đổi thông tin lịch chiếu
+  const handleShowtimeChange = (event) => {
+    const { name, value } = event.target;
+    setShowtimeData({ ...showtimeData, [name]: value });
+  };
+
+  // Gửi dữ liệu để tạo lịch chiếu
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (showtimeData.maRap && showtimeData.ngayChieuGioChieu && showtimeData.giaVe && showtimeData.maPhim) {
+      dispatch(createShowtime(showtimeData));
+    } else {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+    }
+  };
+
+  return (
+    <div>
+      <h2>Chọn Rạp và Tạo Lịch Chiếu</h2>
+      {loading && <p>Đang tải...</p>}
+      {error && <p>Lỗi: {error}</p>}
+
+      {/* Select hệ thống rạp */}
+      <select value={selectedSystem} onChange={handleSystemChange}>
+        <option value="">Chọn hệ thống rạp</option>
+        {cinemaSystems.map((system) => (
+          <option key={system.maHeThongRap} value={system.maHeThongRap}>
+            {system.tenHeThongRap}
+          </option>
+        ))}
+      </select>
+
+      {/* Select cụm rạp */}
+      {selectedSystem && (
+        <select value={selectedCluster} onChange={handleClusterChange}>
+          <option value="">Chọn cụm rạp</option>
+          {cinemaClusters.map((cluster) => (
+            <option key={cluster.maCumRap} value={cluster.maCumRap}>
+              {cluster.tenCumRap}
+            </option>
+          ))}
+        </select>
+      )}
+
+      {/* Form tạo lịch chiếu */}
+      {selectedCluster && (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Mã phim:</label>
+            <input
+              type="text"
+              name="maPhim"
+              value={showtimeData.maPhim}
+              onChange={handleShowtimeChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Ngày chiếu - Giờ chiếu:</label>
+            <input
+              type="datetime-local"
+              name="ngayChieuGioChieu"
+              value={showtimeData.ngayChieuGioChieu}
+              onChange={handleShowtimeChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Giá vé:</label>
+            <input
+              type="number"
+              name="giaVe"
+              value={showtimeData.giaVe}
+              onChange={handleShowtimeChange}
+              required
+            />
+          </div>
+          <button type="submit">Tạo Lịch Chiếu</button>
+        </form>
+      )}
+    </div>
+  );
+}

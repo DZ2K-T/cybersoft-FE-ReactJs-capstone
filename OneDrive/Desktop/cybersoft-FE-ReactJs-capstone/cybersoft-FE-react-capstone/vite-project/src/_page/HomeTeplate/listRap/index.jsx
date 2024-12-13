@@ -4,31 +4,24 @@ import { fetchCinemas } from "./duck/reducer";
 
 const Index = () => {
   const dispatch = useDispatch();
-  const { cinemasData, loading, error } = useSelector(
-    (state) => state.cinema || { cinemasData: {}, loading: false, error: null }
-  );
 
-  const cinemas = cinemasData.data || []; // Extract cinemas from data
+  const { cinemasData, loading, error } = useSelector((state) => state.cinemaSlice);
 
   useEffect(() => {
-    console.log("Fetching cinemas...");
     dispatch(fetchCinemas());
-  }, [dispatch]);
+  }, []);
 
-  useEffect(() => {
-    console.log("Cinemas:", cinemas); // This will log the cinemas data after it's fetched
-  }, [cinemas]);
+  if (loading) return <p>Loading...</p>; 
+  if (error) return <p>Error: {error}</p>; 
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">Danh Sách Hệ Thống Rạp</h1>
-      {loading && <p className="text-center text-blue-500">Đang tải...</p>}
-      {error && <p className="text-center text-red-500">Lỗi: {error}</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {cinemas.length > 0 ? (
-          cinemas.map((cinema) => (
+        {cinemasData && cinemasData.length > 0 ? (
+          cinemasData.map((cinema) => (
             <div
-              key={cinema.maHeThongRap}
+              key={cinema.maHeThongRap} 
               className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center"
             >
               <img

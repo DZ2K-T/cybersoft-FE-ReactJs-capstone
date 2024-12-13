@@ -37,28 +37,29 @@ export const fetchCinemas = createAsyncThunk(
 );
 
 const cinemaSlice = createSlice({
-    name: 'cinema',
-    initialState: {
-      cinemasData: [], // Initialize as an array
-      loading: false,
-      error: null,
-    },
-    extraReducers: (builder) => {
-      builder
-        .addCase(fetchCinemas.pending, (state) => {
-          state.loading = true;
-          state.error = null;
-        })
-        .addCase(fetchCinemas.fulfilled, (state, action) => {
-          state.loading = false;
-          state.cinemasData = action.payload; // Action payload should be an array
-        })
-        .addCase(fetchCinemas.rejected, (state, action) => {
-          state.loading = false;
-          state.error = action.payload;
-        });
-    },
-  });
-  
-  export default cinemaSlice.reducer;
-  
+  name: 'cinema',
+  initialState: {
+    cinemasData: [], // Initialize as an array
+    loading: false,
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCinemas.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCinemas.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cinemasData = action.payload; // Action payload should be an array
+      })
+      .addCase(fetchCinemas.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+export default cinemaSlice.reducer;
+
