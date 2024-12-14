@@ -11,44 +11,99 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fecthInforFilm } from "../inforFilms/duck/reducer";
 import { useParams } from "react-router-dom";
-import { fecthInforCumrap, fecthInforCinema, showtime } from "./duck/reducer";
+import { fetchInforCumrap, fetchInforCinema, showtime } from "./duck/reducer";
 
 export default function Showtime() {
+  const { idFilm } = useParams();
+  const [filmId, setFilmId] = useState(null);
+  const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
   const [formState, setFormState] = useState({
-    heThongRap: "",
-    cumRap: "",
-    ngayChieu: "",
-    giaVe: "",
+    maPhim: idFilm || 0,
+    ngayChieuGioChieu: "11/12/2000 16:50:00",
+    maRap: 901,
+    giaVe: 500,
   });
+  console.log(formState);
+
+  useEffect(() => {
+    if (idFilm) {
+      setFilmId(idFilm); // Gán idFilm cho state
+    }
+  }, [idFilm]);
+  const heThongRapList = useSelector(
+    (state) => state.creatShowTimeReducer.cinemaData || []
+  );
+  const cumRapList = useSelector(
+    (state) => state.creatShowTimeReducer.cumrapData || []
+  );
+  console.log(heThongRapList);
 
   const handleChange = (e) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormState({ ...formState, [name]: value });
+    if (name === "hethongrap") {
+      dispatch(fetchInforCumrap(value));
+    }
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(showtime(formState)); // Gửi dữ liệu tạo lịch chiếu
+
+    // Validate các trường cần thiết
+    // if (
+    //   !formState.maPhim ||
+    //   !formState.ngayChieuGioChieu ||
+    //   !formState.maRap ||
+    //   !formState.giaVe
+    // ) {
+    //   alert("Vui lòng nhập đầy đủ thông tin!");
+    //   return;
+    // }
+
+    // Gửi dữ liệu lên server
+    dispatch(showtime(formState));
   };
+  console.log(formState);
+
   const props = useSelector((state) => state.inforFilmReducer);
 
-  const { idFilm } = useParams();
-
   const dispatch = useDispatch();
-
-  const heThongRap = useSelector((state) => {
-    state.creatShowTimeReducer;
-  });
-  console.log(heThongRap);
 
   useEffect(() => {
     if (idFilm) {
       dispatch(fecthInforFilm(idFilm));
     }
-    dispatch(fecthInforCinema());
+    dispatch(fetchInforCinema());
+    dispatch(fetchInforCumrap());
   }, [idFilm, dispatch]);
-  // if (!props?.data) {
-  //   return <div>Loading phim ....</div>;
-  // }
+
+  // if (props.loading)
+  //   return (
+  //     <div className="text-center">
+  //       <div role="status">
+  //         <svg
+  //           aria-hidden="true"
+  //           className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+  //           viewBox="0 0 100 101"
+  //           fill="none"
+  //           xmlns="http://www.w3.org/2000/svg"
+  //         >
+  //           <path
+  //             d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+  //             fill="currentColor"
+  //           />
+  //           <path
+  //             d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+  //             fill="currentFill"
+  //           />
+  //         </svg>
+  //         <span className="sr-only">Loading...</span>
+  //       </div>
+  //     </div>
+  //   );
 
   return (
     <div>
@@ -269,7 +324,23 @@ export default function Showtime() {
               alt={props.data?.hinhAnh}
             />
           </div>
-          <form className="max-w-sm mx-auto mt-20">
+          <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-20">
+            <div className="flex items-center mb-4">
+              <label
+                htmlFor="maPhim"
+                className="w-32 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Mã phim:
+              </label>
+              <input
+                id="maPhim"
+                name="maPhim"
+                type="text"
+                value={formState.maPhim} // Gán giá trị từ formState
+                readOnly // Để không cho người dùng chỉnh sửa mã phim
+                className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
             <div className="flex items-center mb-4">
               <label
                 htmlFor="countries"
@@ -286,7 +357,9 @@ export default function Showtime() {
                 placeholder="Chọn hệ thống rạp"
               />
               <datalist id="hethongrap-options">
-                <option value="United States" />
+                {heThongRapList.map((rap) => (
+                  <option key={rap.maHeThongRap} value={rap.tenHeThongRap} />
+                ))}
               </datalist>
             </div>
             <div className="flex items-center mb-4">
@@ -305,36 +378,42 @@ export default function Showtime() {
                 placeholder="Chọn cụm rạp"
               />
               <datalist id="country-options">
-                <option value="United States" />
+                {cumRapList.map((cum) => (
+                  <option key={cum.maCumRap} value={cum.tenCumRap} />
+                ))}
               </datalist>
             </div>
             <div className="flex items-center mb-4">
               <label
-                htmlFor="ngaychieu"
+                htmlFor="ngayChieuGioChieu"
                 className="w-32 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Ngày chiếu giờ chiếu:
               </label>
               <input
+                value={formState.ngayChieuGioChieu}
                 onChange={handleChange}
                 type="date"
-                id="ngaychieu"
-                name="ngaychieu"
+                id="ngayChieuGioChieu"
+                name="ngayChieuGioChieu"
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="select date"
               />
             </div>
             <div className="flex items-center mb-4">
               <label
-                htmlFor="Giave"
+                htmlFor="giaVe"
                 className="w-32 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Giá vé:
               </label>
               <input
+                // value={formState.giaVe}
+                min="0"
+                id="giaVe"
                 onChange={handleChange}
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                type="text"
+                type="number"
               />
             </div>
             <div className="flex items-center">
@@ -345,8 +424,7 @@ export default function Showtime() {
                 Chức năng:
               </label>
               <button
-                onClick={handleSubmit}
-                type="button"
+                type="submit"
                 className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
               >
                 Tạo lịch chiếu
