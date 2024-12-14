@@ -14,6 +14,11 @@ import dangKy from "../_page/HomeTeplate/dangKi";
 import dangNhap from "../_page/HomeTeplate/dangNhap";
 import ListMovies from "../_page/HomeTeplate/listMovies";
 
+import Showtime from "../_page/AdminTeplate/Showtime";
+
+import ListRap from "../_page/HomeTeplate/listRap"
+
+
 const routes = [
   {
     path: "",
@@ -23,12 +28,11 @@ const routes = [
         path: "about",
         element: AboutPage,
       },
-
-      {
-        path: "me",
-        element: Carousel,
-      },
     ],
+  },
+  {
+    path: "list-rap",
+    element: ListRap,
   },
   {
     path: "dangky",
@@ -65,6 +69,10 @@ const routes = [
       {
         path: "films/edit/:idFilm",
         element: formEdit,
+      },
+      {
+        path: "films/showtime/:idFilm",
+        element: Showtime,
       },
     ],
   },
