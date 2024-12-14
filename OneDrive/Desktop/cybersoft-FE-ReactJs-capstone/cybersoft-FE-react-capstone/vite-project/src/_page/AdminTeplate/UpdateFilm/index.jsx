@@ -109,8 +109,8 @@ export default function UpdateFilm() {
       hinhAnh: file,
     }));
   };
-  const { data } = props;
-  console.log(data);
+
+
 
   return (
     <div>

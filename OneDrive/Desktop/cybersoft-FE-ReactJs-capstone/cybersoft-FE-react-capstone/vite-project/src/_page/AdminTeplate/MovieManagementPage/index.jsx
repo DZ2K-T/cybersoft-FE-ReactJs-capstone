@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { fetchListMovie } from "./duck/reducer";
 import { useSelector, useDispatch } from "react-redux";
 
+
 export default function MovieManagementPage() {
   const dispatch = useDispatch();
   const props = useSelector((state) => state.listMovieReducer);
