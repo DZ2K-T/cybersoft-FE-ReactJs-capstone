@@ -4,9 +4,9 @@ import { faTv } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import DeleteFilm from "../DeleteFilm";
-
 
 export default function ListFilms(props) {
   const { data } = props;
@@ -38,6 +38,14 @@ export default function ListFilms(props) {
           </Link>
 
           <DeleteFilm filmId={data.maPhim} />
+        </td>
+        <td>
+          <Link to={`/admin/films/showtime/${data.maPhim}`}>
+            <button className="mr-3">
+              <FontAwesomeIcon icon={faCalendar} />
+              {/* button showtime */}
+            </button>
+          </Link>
         </td>
       </tr>
     </tbody>

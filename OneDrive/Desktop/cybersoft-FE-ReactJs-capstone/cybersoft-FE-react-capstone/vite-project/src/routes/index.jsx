@@ -7,7 +7,17 @@ import MovieManagementPage from "../_page/AdminTeplate/MovieManagementPage";
 import AuthPage from "../_page/AdminTeplate/_auth";
 import Addnew from "../_page/AdminTeplate/Addnew";
 import formEdit from "../_page/AdminTeplate/UpdateFilm";
+import ListMovie from "../_page/HomeTeplate/listMovie";
+import Carousel from "../_page/HomeTeplate/Carousel";
 // import Editfims from "../_page/AdminTeplate/editFilms";
+import dangKy from "../_page/HomeTeplate/dangKi";
+import dangNhap from "../_page/HomeTeplate/dangNhap";
+import ListMovies from "../_page/HomeTeplate/listMovies";
+
+import Showtime from "../_page/AdminTeplate/Showtime";
+
+import ListRap from "../_page/HomeTeplate/listRap"
+
 
 const routes = [
   {
@@ -19,6 +29,22 @@ const routes = [
         element: AboutPage,
       },
     ],
+  },
+  {
+    path: "list-rap",
+    element: ListRap,
+  },
+  {
+    path: "dangky",
+    element: dangKy,
+  },
+  {
+    path: "dangnhap",
+    element: dangNhap,
+  },
+  {
+    path: "list-movie",
+    element: ListMovies,
   },
   {
     path: "admin",
@@ -43,6 +69,10 @@ const routes = [
       {
         path: "films/edit/:idFilm",
         element: formEdit,
+      },
+      {
+        path: "films/showtime/:idFilm",
+        element: Showtime,
       },
     ],
   },

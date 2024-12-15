@@ -7,23 +7,28 @@ export const authLogin = createAsyncThunk(
     try {
       const result = await api.post(`QuanLyNguoiDung/DangNhap`, user);
       const userInfo = result.data.content;
+
       if (userInfo.maLoaiNguoiDung === "QuanTri") {
         localStorage.setItem("USER_ADMIN", JSON.stringify(userInfo));
+      } else if (userInfo.maLoaiNguoiDung === "KhachHang") {
+        localStorage.setItem("USER_KHACHHANG", JSON.stringify(userInfo));
       } else {
         return rejectWithValue({
-          data: {
-            content: "Bạn không có quyền truy cập trang này!",
-          },
+          message: "Không có quyền truy cập trang này!",
         });
       }
-      return result.data.content;
+      return userInfo;
     } catch (error) {
-      return rejectWithValue(error.response);
+      return rejectWithValue(
+        error.response?.data || { message: "Đã xảy ra lỗi" }
+      );
     }
   }
 );
 const userInfo = localStorage.getItem("USER_ADMIN")
   ? JSON.parse(localStorage.getItem("USER_ADMIN"))
+  : localStorage.getItem("USER_KHACHHANG")
+  ? JSON.parse(localStorage.getItem("USER_KHACHHANG"))
   : null;
 
 const initialState = {
