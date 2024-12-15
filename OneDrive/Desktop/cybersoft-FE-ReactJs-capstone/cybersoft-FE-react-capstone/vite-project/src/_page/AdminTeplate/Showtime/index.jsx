@@ -358,6 +358,9 @@ export default function Showtime() {
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Chọn hệ thống rạp"
               >
+                <option value="" disabled selected>
+                  Vui lòng chọn hệ thống rạp
+                </option>
                 {heThongRapList.map((rap) => (
                   // <option key={rap.maHeThongRap} value={rap.tenHeThongRap} />
                   <option key={rap.maHeThongRap} value={rap.maHeThongRap}>
@@ -382,6 +385,9 @@ export default function Showtime() {
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Chọn cụm rạp"
               >
+                <option value="" disabled selected>
+                  Vui lòng chọn cụm rạp
+                </option>
                 {cumRapList.map((cum) => (
                   <option key={cum.maCumRap} value={cum.maCumRap}>
                     {cum.tenCumRap}
