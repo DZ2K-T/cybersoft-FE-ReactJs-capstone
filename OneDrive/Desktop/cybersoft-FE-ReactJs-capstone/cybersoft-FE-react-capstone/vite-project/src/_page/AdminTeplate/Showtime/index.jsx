@@ -24,8 +24,8 @@ export default function Showtime() {
   const [formState, setFormState] = useState({
     maPhim: idFilm || 0,
     ngayChieuGioChieu: "11/12/2000 16:50:00",
-    maRap: 901,
-    giaVe: 500,
+    maRap: "glx-huynh-tan-phat",
+    giaVe: 75000,
   });
   console.log(formState);
 
@@ -80,7 +80,7 @@ export default function Showtime() {
     dispatch(fetchInforCumrap());
   }, [idFilm, dispatch]);
 
-  // if (props.loading)
+  // if (props.loading) {
   //   return (
   //     <div className="text-center">
   //       <div role="status">
@@ -104,6 +104,7 @@ export default function Showtime() {
   //       </div>
   //     </div>
   //   );
+  // }
 
   return (
     <div>
@@ -348,19 +349,22 @@ export default function Showtime() {
               >
                 Hệ thống rạp:
               </label>
-              <input
+
+              <select
                 onChange={handleChange}
                 list="hethongrap-options"
                 id="hethongrap"
                 name="hethongrap"
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Chọn hệ thống rạp"
-              />
-              <datalist id="hethongrap-options">
+              >
                 {heThongRapList.map((rap) => (
-                  <option key={rap.maHeThongRap} value={rap.tenHeThongRap} />
+                  // <option key={rap.maHeThongRap} value={rap.tenHeThongRap} />
+                  <option key={rap.maHeThongRap} value={rap.maHeThongRap}>
+                    {rap.tenHeThongRap}
+                  </option>
                 ))}
-              </datalist>
+              </select>
             </div>
             <div className="flex items-center mb-4">
               <label
@@ -369,19 +373,21 @@ export default function Showtime() {
               >
                 Cụm rạp:
               </label>
-              <input
+
+              <select
                 onChange={handleChange}
                 list="country-options"
                 id="cumrap"
                 name="cumrap"
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Chọn cụm rạp"
-              />
-              <datalist id="country-options">
+              >
                 {cumRapList.map((cum) => (
-                  <option key={cum.maCumRap} value={cum.tenCumRap} />
+                  <option key={cum.maCumRap} value={cum.maCumRap}>
+                    {cum.tenCumRap}
+                  </option>
                 ))}
-              </datalist>
+              </select>
             </div>
             <div className="flex items-center mb-4">
               <label
@@ -393,7 +399,7 @@ export default function Showtime() {
               <input
                 value={formState.ngayChieuGioChieu}
                 onChange={handleChange}
-                type="date"
+                type="datetime"
                 id="ngayChieuGioChieu"
                 name="ngayChieuGioChieu"
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
