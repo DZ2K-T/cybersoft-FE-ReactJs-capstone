@@ -23,9 +23,9 @@ export default function Showtime() {
 
   const [formState, setFormState] = useState({
     maPhim: idFilm || 0,
-    ngayChieuGioChieu: "11/12/2000 16:50:00",
-    maRap: 901,
-    giaVe: 500,
+    ngayChieuGioChieu: "",
+    maRap: "",
+    giaVe: "",
   });
   console.log(formState);
 
@@ -44,13 +44,32 @@ export default function Showtime() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "giaVe") {
+      const numericValue = Number(value);
+      if (numericValue < 75000 || numericValue > 200000) {
+        alert("Giá vé phải nằm trong khoảng từ 75.000 đến 200.000!");
+        return;
+      }
+    }
     setFormState({ ...formState, [name]: value });
     if (name === "hethongrap") {
       dispatch(fetchInforCumrap(value));
     }
   };
+  const validateDateTime = (inputDateTime) => {
+    const regex = /^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}$/; // Định dạng dd/MM/yyyy hh:mm:ss
+    return regex.test(inputDateTime);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(showtime(formState)).then((response) => {
+      if (response.payload.success) {
+        alert("Tạo lịch chiếu thành công!"); // Hiển thị thông báo thành công
+      } else  {
+        alert("Tạo lịch chiếu thành công!");
+      }
+    });
 
     // Validate các trường cần thiết
     // if (
@@ -73,14 +92,15 @@ export default function Showtime() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (idFilm) {
+    if (idFilm && !props.data) {
       dispatch(fecthInforFilm(idFilm));
     }
-    dispatch(fetchInforCinema());
-    dispatch(fetchInforCumrap());
+    if (!heThongRapList.length) {
+      dispatch(fetchInforCinema());
+    }
   }, [idFilm, dispatch]);
 
-  // if (props.loading)
+  // if (props.loading) {
   //   return (
   //     <div className="text-center">
   //       <div role="status">
@@ -104,6 +124,7 @@ export default function Showtime() {
   //       </div>
   //     </div>
   //   );
+  // }
 
   return (
     <div>
@@ -348,40 +369,51 @@ export default function Showtime() {
               >
                 Hệ thống rạp:
               </label>
-              <input
+
+              <select
                 onChange={handleChange}
                 list="hethongrap-options"
                 id="hethongrap"
                 name="hethongrap"
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Chọn hệ thống rạp"
-              />
-              <datalist id="hethongrap-options">
+              >
+                <option value="" disabled selected>
+                  Vui lòng chọn hệ thống rạp
+                </option>
                 {heThongRapList.map((rap) => (
-                  <option key={rap.maHeThongRap} value={rap.tenHeThongRap} />
+                  // <option key={rap.maHeThongRap} value={rap.tenHeThongRap} />
+                  <option key={rap.maHeThongRap} value={rap.maHeThongRap}>
+                    {rap.tenHeThongRap}
+                  </option>
                 ))}
-              </datalist>
+              </select>
             </div>
             <div className="flex items-center mb-4">
               <label
-                htmlFor="cumrap"
+                htmlFor="maRap"
                 className="w-32 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Cụm rạp:
               </label>
-              <input
+
+              <select
                 onChange={handleChange}
                 list="country-options"
-                id="cumrap"
-                name="cumrap"
+                id="maRap"
+                name="maRap"
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Chọn cụm rạp"
-              />
-              <datalist id="country-options">
-                {cumRapList.map((cum) => (
-                  <option key={cum.maCumRap} value={cum.tenCumRap} />
+              >
+                <option value="" disabled selected>
+                  Vui lòng chọn cụm rạp
+                </option>
+                {cumRapList.map((cumRap) => (
+                  <option key={cumRap.maCumRap} value={cumRap.maCumRap}>
+                    {cumRap.tenCumRap}
+                  </option>
                 ))}
-              </datalist>
+              </select>
             </div>
             <div className="flex items-center mb-4">
               <label
@@ -393,11 +425,11 @@ export default function Showtime() {
               <input
                 value={formState.ngayChieuGioChieu}
                 onChange={handleChange}
-                type="date"
+                type="datetime"
                 id="ngayChieuGioChieu"
                 name="ngayChieuGioChieu"
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="select date"
+                placeholder=" dd/MM/yyyy hh:mm:ss "
               />
             </div>
             <div className="flex items-center mb-4">
@@ -408,12 +440,16 @@ export default function Showtime() {
                 Giá vé:
               </label>
               <input
-                // value={formState.giaVe}
-                min="0"
+                step="5000"
+                min="75000"
+                max="200000"
+                name="giaVe"
+                value={formState.giaVe}
                 id="giaVe"
                 onChange={handleChange}
                 className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 type="number"
+                placeholder="Chọn giá vé (75.000 - 200.000)"
               />
             </div>
             <div className="flex items-center">
