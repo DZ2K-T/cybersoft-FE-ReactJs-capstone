@@ -21,9 +21,11 @@ export const fetchInforCumrap = createAsyncThunk(
   "cinema/cumrap",
   async (maHeThongRap, { rejectWithValue }) => {
     try {
-      const result = await api.get(`QuanLyRap/LayThongTinCumRapTheoHeThong?maHeThongRap=${maHeThongRap}`, {
-        params: { maHeThongRap }, 
-      });
+
+      const result = await api.get(
+        `QuanLyRap/LayThongTinCumRapTheoHeThong?maHeThongRap=${maHeThongRap}`
+      );
+
       return result.data.content;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);

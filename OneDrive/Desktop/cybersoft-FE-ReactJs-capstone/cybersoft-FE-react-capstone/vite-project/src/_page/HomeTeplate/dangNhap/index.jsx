@@ -4,6 +4,7 @@ import { login } from "./duck/reducer";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const props = useSelector((state) => state.authReducer);
   const [taiKhoan, setTaiKhoan] = useState("");
   const [matKhau, setMatKhau] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
@@ -13,8 +14,8 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/"); // Navigate after login success
-    }
+      navigate("/me"); // Navigate after login success
+    } 
   }, [user, navigate]);
 
   const validateForm = () => {
