@@ -1,131 +1,335 @@
-import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrash,
+  faMagnifyingGlass,
+  faPenToSquare,
+  faTv,
+  faFile,
+} from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCinemaSystems, fetchCinemaClusters, createShowtime, resetShowtimeSuccess } from "../reducers/cinemaReducer";
+import { fecthInforFilm } from "../inforFilms/duck/reducer";
+import { useParams } from "react-router-dom";
+import { fetchInforCumrap, fetchInforCinema, showtime } from "./duck/reducer";
 
-export default function CinemaSelect() {
-  const dispatch = useDispatch();
-  const { cinemaSystems, cinemaClusters, loading, error, showtimeSuccess } = useSelector(
-    (state) => state.cinema
-  );
-  const [selectedSystem, setSelectedSystem] = useState("");
-  const [selectedCluster, setSelectedCluster] = useState("");
-  const [showtimeData, setShowtimeData] = useState({
-    maRap: "",
+export default function Showtime() {
+  const { idFilm } = useParams();
+  const [filmId, setFilmId] = useState(null);
+  
+  const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  const [formState, setFormState] = useState({
+    maPhim: idFilm || 0,
     ngayChieuGioChieu: "",
-    giaVe: "",
-    maPhim: "",
+    maRap: "",
+    giaVe: 0,
   });
 
-  // Load hệ thống rạp khi component mount
   useEffect(() => {
-    dispatch(fetchCinemaSystems());
-  }, [dispatch]);
+    if (idFilm) {
+      setFilmId(idFilm); // Gán idFilm cho state
+    }
+  }, [idFilm]);
 
-  // Reset trạng thái khi tạo lịch chiếu thành công
+  const heThongRapList = useSelector(
+    (state) => state.creatShowTimeReducer.cinemaData || []
+  );
+  const cumRapList = useSelector(
+    (state) => state.creatShowTimeReducer.cumrapData || []
+  );
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "giaVe") {
+      const numericValue = Number(value);
+      if (numericValue < 75000 || numericValue > 200000) {
+        alert("Giá vé phải nằm trong khoảng từ 75.000 đến 200.000!");
+        return;
+      }
+    }
+    setFormState({ ...formState, [name]: value });
+    if (name === "hethongrap") {
+      dispatch(fetchInforCumrap(value));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch(showtime(formState));
+  };
+
+  const props = useSelector((state) => state.inforFilmReducer);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (showtimeSuccess) {
-      alert("Tạo lịch chiếu thành công!");
-      dispatch(resetShowtimeSuccess());
+    if (idFilm && !props.data) {
+      dispatch(fecthInforFilm(idFilm));
     }
-  }, [showtimeSuccess, dispatch]);
-
-  // Xử lý khi thay đổi hệ thống rạp
-  const handleSystemChange = (event) => {
-    const selectedMaHeThongRap = event.target.value;
-    setSelectedSystem(selectedMaHeThongRap);
-    setSelectedCluster(""); // Reset cụm rạp khi thay đổi hệ thống rạp
-    if (selectedMaHeThongRap) {
-      dispatch(fetchCinemaClusters(selectedMaHeThongRap));
+    if (!heThongRapList.length) {
+      dispatch(fetchInforCinema());
     }
-  };
-
-  // Xử lý khi thay đổi cụm rạp
-  const handleClusterChange = (event) => {
-    const selectedMaRap = event.target.value;
-    setSelectedCluster(selectedMaRap);
-    setShowtimeData({ ...showtimeData, maRap: selectedMaRap });
-  };
-
-  // Xử lý thay đổi thông tin lịch chiếu
-  const handleShowtimeChange = (event) => {
-    const { name, value } = event.target;
-    setShowtimeData({ ...showtimeData, [name]: value });
-  };
-
-  // Gửi dữ liệu để tạo lịch chiếu
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (showtimeData.maRap && showtimeData.ngayChieuGioChieu && showtimeData.giaVe && showtimeData.maPhim) {
-      dispatch(createShowtime(showtimeData));
-    } else {
-      alert("Vui lòng nhập đầy đủ thông tin!");
-    }
-  };
+  }, [idFilm, dispatch]);
 
   return (
     <div>
-      <h2>Chọn Rạp và Tạo Lịch Chiếu</h2>
-      {loading && <p>Đang tải...</p>}
-      {error && <p>Lỗi: {error}</p>}
-
-      {/* Select hệ thống rạp */}
-      <select value={selectedSystem} onChange={handleSystemChange}>
-        <option value="">Chọn hệ thống rạp</option>
-        {cinemaSystems.map((system) => (
-          <option key={system.maHeThongRap} value={system.maHeThongRap}>
-            {system.tenHeThongRap}
-          </option>
-        ))}
-      </select>
-
-      {/* Select cụm rạp */}
-      {selectedSystem && (
-        <select value={selectedCluster} onChange={handleClusterChange}>
-          <option value="">Chọn cụm rạp</option>
-          {cinemaClusters.map((cluster) => (
-            <option key={cluster.maCumRap} value={cluster.maCumRap}>
-              {cluster.tenCumRap}
-            </option>
-          ))}
-        </select>
-      )}
-
-      {/* Form tạo lịch chiếu */}
-      {selectedCluster && (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Mã phim:</label>
-            <input
-              type="text"
-              name="maPhim"
-              value={showtimeData.maPhim}
-              onChange={handleShowtimeChange}
-              required
-            />
+      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div className="px-3 py-3 lg:px-5 lg:pl-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-start rtl:justify-end">
+              <button
+                data-drawer-target="logo-sidebar"
+                data-drawer-toggle="logo-sidebar"
+                aria-controls="logo-sidebar"
+                type="button"
+                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              >
+                <span className="sr-only">Mở menu sidebar</span>
+                <svg
+                  className="w-6 h-6"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clipRule="evenodd"
+                    fillRule="evenodd"
+                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+                  />
+                </svg>
+              </button>
+              <a href="#" className="flex ms-2 md:me-24">
+                <img
+                  src="https://w7.pngwing.com/pngs/298/685/png-transparent-movies-logo-backsheet-hand-painted-practical.png"
+                  className="h-8 me-3"
+                  alt="FlowBite Logo"
+                />
+                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white text-orange-500">
+                  AYO! FILM
+                </span>
+              </a>
+            </div>
+            <div className="flex items-center">
+              <div className="flex items-center ms-3">
+                <div>
+                  <button
+                    type="button"
+                    className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    aria-expanded="false"
+                    data-dropdown-toggle="dropdown-user"
+                  >
+                    <span className="sr-only">Mở menu người dùng</span>
+                    <img
+                      className="w-8 h-8 rounded-full"
+                      src="https://scontent.fsgn8-3.fna.fbcdn.net/v/t39.30808-6/217547034_541490913872359_6533652150174378304_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=o1APX21PGdwQ7kNvgE_9R8O&_nc_zt=23&_nc_ht=scontent.fsgn8-3.fna&_nc_gid=ABSfFzwXiL1dOFIt3ouNH-E&oh=00_AYCv0l8gMFoHHyVEpYcsbMieF_hn2XFqwXLcTE8Lo7TTEA&oe=67532FCF"
+                      alt="Ảnh người dùng"
+                    />
+                  </button>
+                </div>
+                <div
+                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                  id="dropdown-user"
+                >
+                  <div className="px-4 py-3" role="none">
+                    <p
+                      className="text-sm text-gray-900 dark:text-white"
+                      role="none"
+                    >
+                      Neil Sims
+                    </p>
+                    <p
+                      className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
+                      role="none"
+                    >
+                      neil.sims@flowbite.com
+                    </p>
+                  </div>
+                  <ul className="py-1" role="none">
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        Dashboard
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        Cài đặt
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        Thu nhập
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        role="menuitem"
+                      >
+                        Đăng xuất
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <label>Ngày chiếu - Giờ chiếu:</label>
-            <input
-              type="datetime-local"
-              name="ngayChieuGioChieu"
-              value={showtimeData.ngayChieuGioChieu}
-              onChange={handleShowtimeChange}
-              required
-            />
+        </div>
+      </nav>
+
+      <aside
+        id="logo-sidebar"
+        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+        aria-label="Sidebar"
+      >
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-gray-600 dark:bg-gray-800">
+          <ul className="space-y-2 font-medium">
+            <li>
+              <a
+                href="#"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <FontAwesomeIcon icon={faTv} className="w-6 h-6" />
+                <span className="ml-3">Phim</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/admin/users"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <FontAwesomeIcon icon={faFile} className="w-6 h-6" />
+                <span className="ml-3">Quản lý người dùng</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/admin/showtimes"
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <FontAwesomeIcon icon={faFile} className="w-6 h-6" />
+                <span className="ml-3">Lịch chiếu</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <div className="p-4 sm:ml-64 mt-20">
+        <div className="container max-w-6xl mx-auto">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-semibold dark:text-white">
+              Thêm Lịch Chiếu
+            </h1>
           </div>
-          <div>
-            <label>Giá vé:</label>
-            <input
-              type="number"
-              name="giaVe"
-              value={showtimeData.giaVe}
-              onChange={handleShowtimeChange}
-              required
-            />
-          </div>
-          <button type="submit">Tạo Lịch Chiếu</button>
-        </form>
-      )}
+          <form onSubmit={handleSubmit} className="mt-8">
+            <div className="flex items-center mb-4">
+              <label
+                htmlFor="maHeThongRap"
+                className="w-32 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Hệ thống rạp:
+              </label>
+              <select
+                id="maHeThongRap"
+                name="maHeThongRap"
+                className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                onChange={handleChange}
+              >
+                <option value="" disabled selected>
+                  Chọn hệ thống rạp
+                </option>
+                {heThongRapList.map((heThongRap) => (
+                  <option key={heThongRap.maHeThongRap} value={heThongRap.maHeThongRap}>
+                    {heThongRap.tenHeThongRap}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center mb-4">
+              <label
+                htmlFor="maRap"
+                className="w-32 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Cụm rạp:
+              </label>
+              <select
+                id="maRap"
+                name="maRap"
+                className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Chọn cụm rạp"
+              >
+                <option value="" disabled selected>
+                  Vui lòng chọn cụm rạp
+                </option>
+                {cumRapList.map((cumRap) => (
+                  <option key={cumRap.maCumRap} value={cumRap.maCumRap}>
+                    {cumRap.tenCumRap}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center mb-4">
+              <label
+                htmlFor="ngayChieuGioChieu"
+                className="w-32 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Ngày chiếu & Giờ:
+              </label>
+              <input
+                id="ngayChieuGioChieu"
+                name="ngayChieuGioChieu"
+                type="datetime-local"
+                value={formState.ngayChieuGioChieu}
+                onChange={handleChange}
+                className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div className="flex items-center mb-4">
+              <label
+                htmlFor="giaVe"
+                className="w-32 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Giá vé:
+              </label>
+              <input
+                id="giaVe"
+                name="giaVe"
+                type="number"
+                value={formState.giaVe}
+                onChange={handleChange}
+                className="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+            <div className="flex items-center justify-center mt-6">
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
+              >
+                Tạo lịch chiếu
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
