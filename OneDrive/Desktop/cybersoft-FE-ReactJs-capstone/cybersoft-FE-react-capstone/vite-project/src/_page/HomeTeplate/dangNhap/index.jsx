@@ -16,6 +16,7 @@ const LoginPage = () => {
     if (user) {
       navigate("/"); // Navigate after login success
     } 
+    // 
   }, [user, navigate]);
 
   const validateForm = () => {
